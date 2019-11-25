@@ -1,4 +1,4 @@
-{% extends 'music/base.html' %}
+{% extends 'music/base_link.html' %}
 {% block title %}{{ gform }}{% endblock %}
 {% block albums_active %}active{% endblock %}
 
@@ -17,55 +17,53 @@
 <h2> {{ gform.gform_desc }} </h2>
 <br><br>
 
-<form action="#">
+{% if error_message %} <p><strong> {{ error_message }} </strong></p> {% endif %}
+
+<form action="{% url 'music:responses' gform.id user.id %}" method="POST">
+  {% csrf_token %}
 	
 	{% for question in gform.question_set.all %}
 		<div class="form-group">
     	<label for="question"> <pre>Q{{ forloop.counter }}   {{ question.ques_text }}</pre></label>
     	{% if question.ques_type == "multiline" %} 
     	<!-- <input type="text" class="form-control" id="question"> -->
-    	<textarea class="form-control" rows="5" id="comment"></textarea>
+    	<textarea class="form-control" rows="5" name="{{ question.ques_text }}" ></textarea>
 
-    	{% elif question.ques_type == "singleline" %}
-    		{% if question.choices == "AlphaNumeric" %} 
-    			<input type="text" class="form-control" id="question" data-inputmask-regex="[A-Za-z0-9]*" />
+    	{% elif question.ques_type == "singleline" %} 
+    	<input type="text" class="form-control" name="ayush" id="question">
 
-    		{% else %}
-    			<input type="text" class="form-control" id="question" >
-    		{% endif %}
-    		
-
-    	{% elif question.ques_type == "num_range" %} 
-      	<br>
+      {% elif question.ques_type == "num_range" %} 
+      <br>
      
       <input type="number" min="{{ question.choices_as_list.0 }}" max="{{ question.choices_as_list.1 }}" class="form-control" name="{{ question.ques_text }}">
+      
     	
     	{% elif question.ques_type == "file_upload" %}
-    		{% if question.choices == "None" %}
-    			<input type="file" class="form-control" id="question">
-    		{% elif question.choices == ".pdf" %}
-    			<input type="file" class="form-control" id="question" accept="application/pdf">
-    		{% endif %}
+              {% if question.choices == "None" %}
+                <input type="file" class="form-control" id="question">
+              {% elif question.choices == ".pdf" %}
+                <input type="file" class="form-control" id="question" accept="application/pdf">
+              {% endif %}
 
     	{% elif question.ques_type == "number" %}
-    	<input type="number" class="form-control" id="question">
+    	<input type="number" class="form-control" name="{{ question.ques_text }}">
 
     	{% elif question.ques_type == "url" %}
-    	<input type="url" class="form-control" id="question">
+    	<input type="url" class="form-control" name="{{ question.ques_text }}">
 
     	{% elif question.ques_type == "email" %}
-    	<input type="email" class="form-control" id="question">
+    	<input type="email" class="form-control" name="{{ question.ques_text }}">
 
     	{% elif question.ques_type == "checkbox" %}
     		<br>
     		{% for choice in question.choices_as_list %}
-    			<input type="checkbox"> {{ choice }}<br>
+    			<input type="checkbox" name="question"> {{ choice }}<br>
     		{% endfor%}
 
     	{% elif question.ques_type == "radio" %}
     		<br>
     		{% for choice in question.choices_as_list %}
-    			<input type="radio" name = "question" value="{{ forloop.counter }}"> {{ choice }}<br>
+    			<input type="radio" name = "question" > {{ choice }}<br>
     		{% endfor%}
 
     	{% endif %}
@@ -85,7 +83,7 @@
     <label><input type="checkbox"> Remember me</label>
   </div>
   <button type="submit" class="btn btn-default">Submit</button> -->
-  <button type="submit" class="btn btn-default">Submit</button> 
+  <input type="submit" value="Submit">  </input> 
 </form>
 </div>
 

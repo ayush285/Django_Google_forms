@@ -5,11 +5,14 @@ app_name = 'music'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^(?P<gform_id>[0-9]+)/export_csv/$', views.export_csv, name="export_csv"),
     url(r'^login_user/$', views.login_user, name='login_user'),
     url(r'^edit_profile/$', views.edit_profile, name='edit_profile'),
     url(r'^change_password/$', views.change_password, name='change_password'),
     url(r'^register/$', views.register, name='register'),
     url(r'^(?P<gform_id>[0-9]+)/user/(?P<user_id>[0-9]+)/$', views.filler, name='filler'),
+    url(r'^(?P<gform_id>[0-9]+)/user/(?P<user_id>[0-9]+)/link$', views.link, name='link'),
+    url(r'^(?P<gform_id>[0-9]+)/user/(?P<user_id>[0-9]+)/link$', views.responses, name='responses'),
 
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^(?P<gform_id>[0-9]+)/$', views.detail, name='detail'),

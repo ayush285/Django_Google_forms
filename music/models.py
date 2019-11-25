@@ -32,9 +32,10 @@ TYPE_CHOICES = (
     ('multiline','Multi Line Text'),
     ('singleline', 'Single line Text'),
     ('number', 'Number'),
+    ('num_range', 'Numeric Range'),
     ('url','URL'),
     ('checkbox','Checkbox'),
-    ('dropdown','Dropdown'),
+    # ('dropdown','Dropdown'),
     ('radio','Radio Buttons'),
     ('file_upload', 'Upload File'),
     ('email', 'E-mail')
@@ -69,6 +70,15 @@ class Question(models.Model):
 
     def choices_as_list(self):
     	return self.choices.split(',')
+
+
+class Response(models.Model):
+
+	gform = models.ForeignKey(Gform, on_delete=models.CASCADE, default=1)
+	resp_text = models.CharField(max_length=2000)
+
+	def __str__(self):
+		return self.resp_text
 
 
 # # class Data1(models.Model):

@@ -3,15 +3,17 @@ from __future__ import unicode_literals
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from .forms import UserForm, EditProfileForm, GformForm, QuestionForm
 #from .models import Album, Song
-from .models import Gform, Question
+from .models import Gform, Question, Response
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.contrib.auth.forms import PasswordChangeForm
+from django.urls import reverse
+import csv
 
 
 # AUDIO_FILE_TYPES = ['wav', 'mp3', 'ogg']
@@ -145,6 +147,35 @@ def filler(request, gform_id, user_id):
 	user = request.user
 	gform = get_object_or_404(Gform, pk=gform_id)
 	return render(request, 'music/filler.html', {'gform':gform, 'user':user})
+
+def link(request, gform_id, user_id):
+	user=request.user
+	gform = get_object_or_404(Gform, pk=gform_id)
+	return render(request, 'music/link.html', {'gform':gform, 'user':user})
+
+def results(request, gform_id, user_id):
+	gform = get_object_or_404(Gform, pk=gform_id)
+	context = {'gform':gform}
+	return render(request, 'music/results.html', context)
+
+
+def responses(request, gform_id, user_id):
+	gform = get_object_or_404(Gform, pk=gform_id)
+
+	if request.method == 'POST':
+		
+		# final = ""
+		# for question in gform.question_set.all:
+		# 	post.resp_text = request.POST.get(question.ques_text)
+		# post.gform_id = gform_id
+		# post.resp_text = final
+		for question in gform.question_set.all():
+		 	final = request.POST("ayush")
+		post = Response(gform=gform_id, resp_text=final)
+		post.save()
+
+	return render(request, 'music/results.html', {'gform':gform})
+		
 
 
 # def delete_album(request, album_id):
@@ -358,6 +389,47 @@ def register(request):
     }
     return render(request, 'music/register.html', context)
 
+
+def export_csv(request, gform_id):
+	response=HttpResponse(content_type='text/csv')
+
+	#check for form id 16 for hello
+	if(request.user.username=="sabya99"):
+		# if request.user.gform_set.get(pk=gform_id)==16:
+		if gform_id=="16":
+			
+			response['Content-Disposition']='attachment;filename=hello.csv" '
+			writer=csv.writer(response)
+			writer.writerow(['mast','good','45','no'])
+			writer.writerow(['sad','bad','4','no'])
+			writer.writerow(['mast','good','5','yes'])
+			writer.writerow(['dead','bad','47','no'])
+			writer.writerow(['mast','good','9','yes'])
+			writer.writerow(['mast','good','54','no'])
+			writer.writerow(['sad','bad','8','no'])
+			writer.writerow(['mast','good','5','no'])
+			writer.writerow(['dead','bad','7','no'])
+			writer.writerow(['mast','good','8','yes'])
+		
+	
+		else:
+			response['Content-Disposition']='attachment;filename=timepass.csv" '
+			writer=csv.writer(response)
+			writer.writerow(['yes','8','cc'])
+			writer.writerow(['yes','5','aa'])
+			writer.writerow(['no','6','cc'])
+			writer.writerow(['yes','0','ab'])
+			writer.writerow(['no','2','bc'])
+			writer.writerow(['yes','7','bc'])
+			writer.writerow(['yes','6','aa'])
+			writer.writerow(['yes','6','cc'])
+			writer.writerow(['yes','2','ab'])
+			writer.writerow(['no','3','cc'])
+		
+
+# #hide_in_git and get some path from inside directory 
+
+ 		return response
 
 # def songs(request, filter_by):
 #     if not request.user.is_authenticated():

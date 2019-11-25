@@ -18,7 +18,13 @@
                             <h3>No image to display</h3>
                         {% endif %} -->
                     </a>
-                    <h1>{{ gform.gform_name }} <small>{{ gform.gform_desc }}</small></h1>
+                    <ul class="nav nav-pills">
+                        <li role="presentation">  <h1> <b> {{ gform.gform_name }} </b></h1> </li>
+                        <li role="presentation"> <h2> {{ gform.gform_desc }} </h2> </li>
+                    </ul>
+                         <h5> Generated Form Link: </h5> 
+                        <font color="red"> &nbsp; (current ip_address) + <br>{{ request.get_full_path }}user/{{ user.id }}/link </font>
+                   
                    <!--  <h2>{{ album.artist }}</h2> -->
                 </div>
             </div>
@@ -30,8 +36,9 @@
             <ul class="nav nav-pills" style="margin-bottom: 10px;">
                 <li role="presentation" class="active"><a href="{% url 'music:detail' gform.id %}">View All</a></li>
                 <li role="presentation"><a href="{% url 'music:create_question' gform.id %}">Add New Question</a></li> 
-                <li role="presentation"><a href="{% url 'music:filler' gform.id user.id  %}">Link</a></li> 
+                <li role="presentation"><a href="{% url 'music:filler' gform.id user.id  %}">Preview</a></li> 
                
+
 
             </ul>
 
