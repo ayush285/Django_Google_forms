@@ -35,7 +35,7 @@ TYPE_CHOICES = (
     ('num_range', 'Numeric Range'),
     ('url','URL'),
     ('checkbox','Checkbox'),
-    # ('dropdown','Dropdown'),
+    ('dropdown','Dropdown'),
     ('radio','Radio Buttons'),
     ('file_upload', 'Upload File'),
     ('email', 'E-mail')

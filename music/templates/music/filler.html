@@ -24,7 +24,8 @@
     	<label for="question"> <pre>Q{{ forloop.counter }}   {{ question.ques_text }}</pre></label>
     	{% if question.ques_type == "multiline" %} 
     	<!-- <input type="text" class="form-control" id="question"> -->
-    	<textarea class="form-control" rows="5" id="comment"></textarea>
+    	
+    	<textarea class="form-control" rows="5" id="comment" hidden></textarea>
 
     	{% elif question.ques_type == "singleline" %}
     		{% if question.choices == "AlphaNumeric" %} 
@@ -67,6 +68,14 @@
     		{% for choice in question.choices_as_list %}
     			<input type="radio" name = "question" value="{{ forloop.counter }}"> {{ choice }}<br>
     		{% endfor%}
+
+    	{% elif question.ques_type == "dropdown" %}
+        	<br>
+        	<select name= "question">
+        	{% for choice in question.choices_as_list %}
+           	<option name="question" value="{{ choice }}"> {{ choice }} </option>
+        	{% endfor %}
+    		</select>
 
     	{% endif %}
   		</div>

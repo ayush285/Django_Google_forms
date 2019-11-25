@@ -23,8 +23,10 @@
   {% csrf_token %}
 	
 	{% for question in gform.question_set.all %}
-		<div class="form-group">
-    	<label for="question"> <pre>Q{{ forloop.counter }}   {{ question.ques_text }}</pre></label>
+    
+		  <div class="form-group">
+    	 <label for="question"> <pre> Q{{ forloop.counter }}   {{ question.ques_text }}</pre></label>
+
     	{% if question.ques_type == "multiline" %} 
     	<!-- <input type="text" class="form-control" id="question"> -->
     	<textarea class="form-control" rows="5" name="{{ question.ques_text }}" ></textarea>
@@ -66,8 +68,16 @@
     			<input type="radio" name = "question" > {{ choice }}<br>
     		{% endfor%}
 
+      {% elif question.ques_type == "checkbox" %}
+        <br>
+        <select name= "question">
+        {% for choice in question.choices_as_list %}
+           <option value="{{ choice }}"> {{ choice }} </option> <br>
+        {% endfor %}
+
     	{% endif %}
   		</div>
+    
 	{% endfor %}
 
 
